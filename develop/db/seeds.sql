@@ -12,8 +12,8 @@ VALUES  ("engineer", 75, 3),
        
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES  ("jean", "pants", 4, 3),
-        ("cam", "shirt", 4),
-        ("bob", "socks", 2),
+        ("cam", "shirt", 4, NULL),
+        ("bob", "socks", 2, NULL),
         ("robert", "hat", 1, 2),
-        ("shaq", "basketbal", 3),
+        ("shaq", "basketbal", 3, NULL),
         ("velma", "dog", 1, 1);
