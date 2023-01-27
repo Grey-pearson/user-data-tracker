@@ -72,18 +72,17 @@ const addEmployee = [
         message: 'whats the employee id of the new uses manager? put in 0 if no manager',
     }
 ]
-// find out how to display all users as a list? then displaying all roles is needed
-const updateEmployee = [
+const upEmployeeQs = [
     {
         type: 'number',
         name: 'managerID',
-        message: 'whats the employee id of the new uses manager? put in 0 if no manager',
+        message: 'whats the employee id of the new users manager? put in 0 if no manager',
     }
 ]
 
+// how do i make inquireer pretty? stacks ugly
 const main = () => {
     prompt(Options).then((anwsers) => {
-        // console.log(anwsers.options)
         switch (anwsers.options) {
             case 'view all departments':
                 viewDatabase('department')
@@ -95,32 +94,78 @@ const main = () => {
                 viewDatabase('employee')
                 break;
             case 'add a department':
-                console.log(4)
+                // create adding function for each table
+                console.log('add a department')
+                apendDepartment()
                 break;
             case 'add a role':
-                console.log(5)
+                console.log('add a role')
+                apendToRole()
                 break;
             case 'add an employee':
-                console.log(6)
+                console.log('add an employee')
+                apendToEmployee()
                 break;
             case 'update an employee role':
-                console.log(7)
+                console.log('update an employee role')
+                updateEmployee()
                 break;
         }
     })
 }
 
-const viewDatabase = (anwser) => {
-    console.log(anwser)
+const viewDatabase = (data) => {
+    console.log(data)
     db.query(
-        `SELECT * FROM ${anwser};`,
+        `SELECT * FROM ${data};`,
         function (err, results, fields) {
             console.table(results)
-            // console.log(fields)
-            // console.log(err)
         }
     );
     main()
+}
+
+const apendDepartment = () => {
+    // inquireer to ask for depart._name
+    prompt(addDepartment).then((anwsers) => {
+        // db.query? then just console.table(res)?
+        console.log(anwsers.departmentName)
+        // replicate for the other feilds
+        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
+        db.query(query, function (err, res) {
+            console.log(`new deparment ${anwsers.departmentName}`)
+        })
+
+    })
+}
+
+const apendToRole = () => {
+    // inquireer to ask for title, salery, dapart._id
+    prompt(addRole).then((anwsers) => {
+        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
+        db.query(query, function (err, res) {
+            console.log(`new deparment ${anwsers.departmentName}`)
+        })
+    })
+}
+
+const apendToEmployee = () => {
+    // inquireer to ask for first_name, last_name, role_id, manager_id
+    prompt(addEmployee).then((anwsers) => {
+        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
+        db.query(query, function (err, res) {
+            console.log(`new deparment ${anwsers.departmentName}`)
+        })
+    })
+}
+const updateEmployee = () => {
+    // inquireer to ask for new manager_id ( 0 for no manager )
+    prompt(upEmployeeQs).then((anwsers) => {
+        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
+        db.query(query, function (err, res) {
+            console.log(`new deparment ${anwsers.departmentName}`)
+        })
+    })
 }
 
 main()
