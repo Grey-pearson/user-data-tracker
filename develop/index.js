@@ -23,7 +23,6 @@ const Options = [
         choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
     }
 ]
-
 const addDepartment = [
     {
         type: 'input',
@@ -31,7 +30,6 @@ const addDepartment = [
         message: 'what do you want the department to be named?',
     }
 ]
-
 const addRole = [
     {
         type: 'input',
@@ -49,7 +47,6 @@ const addRole = [
         message: 'whats the id of the department that the role is in?',
     }
 ]
-
 const addEmployee = [
     {
         type: 'input',
@@ -62,7 +59,7 @@ const addEmployee = [
         message: 'whats the last name of the user?',
     },
     {
-        type: 'input',
+        type: 'number',
         name: 'roleID',
         message: 'whats the id of the role user is in?',
     },
@@ -75,8 +72,13 @@ const addEmployee = [
 const upEmployeeQs = [
     {
         type: 'number',
+        name: 'userID',
+        message: 'whats the id of the employee you want to update with a new manager?',
+    },
+    {
+        type: 'number',
         name: 'managerID',
-        message: 'whats the employee id of the new users manager? put in 0 if no manager',
+        message: 'whats the employee id of the new users manager? put in 0 if no manager?',
     }
 ]
 
@@ -131,8 +133,8 @@ const apendDepartment = () => {
         // db.query? then just console.table(res)?
         console.log(anwsers.departmentName)
         // replicate for the other feilds
-        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
-        db.query(query, function (err, res) {
+        var departQuery = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
+        db.query(departQuery, function (err, res) {
             console.log(`new deparment ${anwsers.departmentName}`)
         })
 
@@ -142,9 +144,10 @@ const apendDepartment = () => {
 const apendToRole = () => {
     // inquireer to ask for title, salery, dapart._id
     prompt(addRole).then((anwsers) => {
-        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
-        db.query(query, function (err, res) {
-            console.log(`new deparment ${anwsers.departmentName}`)
+        var roleQuery = `INSERT INTO role (title, salery, department_id) VALUES ('${anwsers.roleTitle}', ${anwsers.roleSalery}, ${anwsers.departmentID});`
+        db.query(roleQuery, function (err, res) {
+            console.log(`new role ${anwsers.roleTitle}`)
+            console.log(err)
         })
     })
 }
@@ -152,20 +155,53 @@ const apendToRole = () => {
 const apendToEmployee = () => {
     // inquireer to ask for first_name, last_name, role_id, manager_id
     prompt(addEmployee).then((anwsers) => {
-        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
-        db.query(query, function (err, res) {
-            console.log(`new deparment ${anwsers.departmentName}`)
-        })
+        // null
+        var roleQueryNull = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${anwsers.firstName}', '${anwsers.lastName}', ${anwsers.roleID}, NULL);`
+        // not null
+        var roleQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${anwsers.firstName}', '${anwsers.lastName}', ${anwsers.roleID}, ${anwsers.managerID});`
+
+        if (anwsers.managerID <= 0) {
+            // null
+            db.query(roleQueryNull, function (err, res) {
+                console.log(`new role ${anwsers.firstName} ${anwsers.lastName}`)
+                console.log(roleQueryNull)
+            })
+        } else {
+            // var
+            console.log('not null')
+            db.query(roleQuery, function (err, res) {
+                console.log(`new role ${anwsers.firstName} ${anwsers.lastName}`)
+                console.log(err)
+            })
+        }
     })
 }
 const updateEmployee = () => {
     // inquireer to ask for new manager_id ( 0 for no manager )
+
+
     prompt(upEmployeeQs).then((anwsers) => {
-        var query = `INSERT INTO department (department_name) VALUES ('${anwsers.departmentName}');`
-        db.query(query, function (err, res) {
-            console.log(`new deparment ${anwsers.departmentName}`)
-        })
+        // var
+        var roleQuery = `UPDATE employee SET manager_id = ${anwsers.managerID} WHERE id = ${anwsers.userID};`
+        // null
+        var roleQueryNull = `UPDATE employee SET manager_id = NULL WHERE id = ${anwsers.userID};`
+
+        if (anwsers.managerID <= 0) {
+            db.query(roleQueryNull, function (err, res) {
+                console.log(`new manager set`)
+                console.log(err)
+            })
+        } else {
+            db.query(roleQuery, function (err, res) {
+                console.log(`new manager set`)
+                console.log(err)
+            })
+        }
     })
+
+    //      UPDATE Customers
+    //      SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
+    //      WHERE CustomerID = 1;
 }
 
 main()
