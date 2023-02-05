@@ -78,7 +78,7 @@ const upEmployeeQs = [
     {
         type: 'number',
         name: 'managerID',
-        message: 'whats the employee id of the new users manager? put in 0 if no manager?',
+        message: 'whats the employee id of the users manager? put in 0 if no manager?',
     }
 ]
 
